@@ -400,7 +400,7 @@ RespuestaCompuesta recuperarRegistros(HttpServletRequest httpRequest, Locale loc
          parametros.setPaginacion(Constante.SIN_PAGINACION);
 
          if (peticionHttp.getParameter("idOperacion") != null) {
-             parametros.setFiltroOperacion(Integer.parseInt(peticionHttp.getParameter("idOperacion")));
+             parametros.setFiltroOperacion(Utilidades.parseInt(peticionHttp.getParameter("idOperacion")));
          }
 
          if (peticionHttp.getParameter("fechaOperativa") != null) {
@@ -456,7 +456,7 @@ RespuestaCompuesta recuperarRegistros(HttpServletRequest httpRequest, Locale loc
          
          /**
           * Validacion de las jornadas del dia anterior
-          * todas las estaciones asociadas deben encontrarse con el estado “Liquidado” para la jornada anterior a la actual.
+          * todas las estaciones asociadas deben encontrarse con el estado "Liquidado" para la jornada anterior a la actual.
           */
          parametros = new ParametrosListar();
          if (peticionHttp.getParameter("fechaOperativa") != null) {
@@ -465,12 +465,13 @@ RespuestaCompuesta recuperarRegistros(HttpServletRequest httpRequest, Locale loc
              parametros.setFiltroFechaJornada(date);
          }
          
+         parametros.setFiltroOperacion(Utilidades.parseInt(peticionHttp.getParameter("idOperacion")));
          respuesta = dJornada.recuperarRegistros(parametros);
          if (!respuesta.estado) {
              throw new Exception(gestorDiccionario.getMessage("sgo.recuperarFallido", null, locale));
          }
 
-         if (respuesta.contenido.carga.size() > 0) { 
+         if (respuesta.contenido.carga.size() > 0) {
         	 for (Jornada obj : (List<Jornada>) respuesta.contenido.carga) {
         		 if (obj.getEstado() != Jornada.ESTADO_LIQUIDADO) {
         			 throw new Exception(gestorDiccionario.getMessage("sgo.errorJornadaAnterior", null, locale));
