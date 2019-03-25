@@ -41,7 +41,7 @@ ALTER TABLE sgo.producto_equivalente
 --perfil_horario
 CREATE SEQUENCE sgo.secuencia_id_perfil_horario
     INCREMENT 1
-    START 370
+    START 400
     MINVALUE 0
     MAXVALUE 9223372036854775807
     CACHE 1;
@@ -2140,13 +2140,32 @@ ALTER TABLE sgo.v_tanque_jornada
 -- Fin Agregado por HT 01-03-2019 15:37
 
 -- Inicio Agregado por HT 04-03-2019 11:08
-insert into sgo.perfil_horario(nombre_perfil, numero_turnos, estado, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values('PERFIL 2 TURNOS', 2, 1, '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+insert into sgo.perfil_horario(id_perfil_horario, nombre_perfil, numero_turnos, estado, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(374, 'P. JORN. CALENDARIO 1T', 1, 1, '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
 
-insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values((select id_perfil_horario from sgo.perfil_horario where nombre_perfil = 'PERFIL 2 TURNOS'), 1, 'TURNO 1', '00:00', '12:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(374, 1, 'TURNO JORNADA', '00:00', '23:59', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
 
-insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values((select id_perfil_horario from sgo.perfil_horario where nombre_perfil = 'PERFIL 2 TURNOS'), 2, 'TURNO 2', '12:01', '23:59', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+insert into sgo.perfil_horario(id_perfil_horario, nombre_perfil, numero_turnos, estado, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(375, 'P. JORN. CALENDARIO 2T', 2, 1, '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
 
-update sgo.estacion set id_perfil_horario = (select id_perfil_horario from sgo.perfil_horario where nombre_perfil = 'PERFIL 2 TURNOS'),  cantidad_turnos = 2;
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(375, 1, 'TURNO 1', '00:00', '12:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(375, 2, 'TURNO 2', '12:00', '23:59', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_horario(id_perfil_horario, nombre_perfil, numero_turnos, estado, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(381, 'P. JORN. CALENDARIO 3T', 3, 1, '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(381, 1, 'TURNO NOCHE', '00:00', '08:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(381, 2, 'TURNO MAÑANA', '08:00', '16:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(381, 3, 'TURNO TARDE', '16:00', '23:59', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_horario(id_perfil_horario, nombre_perfil, numero_turnos, estado, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(373, 'PERFIL KIO 3T', 3, 1, '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(373, 1, 'TURNO DIA', '06:00', '14:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(373, 2, 'TURNO TARDE', '14:00', '22:00', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
+insert into sgo.perfil_detalle_horario(id_perfil_horario, numero_orden, glosa_turno, hora_inicio_turno,  hora_fin_turno, creado_el, creado_por, actualizado_por, actualizado_el, ip_creacion, ip_actualizacion) values(373, 3, 'TURNO NOCHE', '22:00', '05:59', '1549570678266', 2, 2, '1549570678266', '127.0.0.1', '127.0.0.1');
+
 -- Fin Agregado por HT 04-03-2019 11:08
 
 -- Inicio Agregado por HT 11-03-2019 17:43
