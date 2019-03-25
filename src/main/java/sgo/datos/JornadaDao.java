@@ -171,10 +171,7 @@ public class JornadaDao {
 			
 			consultaSQL.append("t1.total_despachos,");
 			consultaSQL.append("t1.id_perfil_horario,");
-			consultaSQL.append("t1.nombre_perfil,"); // JAFETH - HE PUESTO ESTO EN ZEORO ,. sale error en sgov2a-vp/admin/jornada,.,.
-			//consultaSQL.append("0 AS id_perfil_detalle_horario,");
-			//consultaSQL.append("0 AS horaInicioFinTurno,");
-			//consultaSQL.append("0 AS numero_orden,");
+			consultaSQL.append("t1.nombre_perfil,");
 			
 			//Campos de auditoria
 			consultaSQL.append("t1.creado_el,"); 
@@ -457,11 +454,6 @@ public class JornadaDao {
 			consultaSQL.append("UPDATE ");
 			consultaSQL.append(NOMBRE_TABLA);
 			consultaSQL.append(" SET ");
-/*			consultaSQL.append("id_estacion=:Estacion,");
-			consultaSQL.append("operario1=:Operario1,");
-			consultaSQL.append("operario2=:Operario2,");
-			consultaSQL.append("comentario=:Comentario,");
-			consultaSQL.append("fecha_operativa=:FechaOperativa,");*/
 			consultaSQL.append("observacion=:Observacion,");
 			consultaSQL.append("estado=:Estado,");
 			consultaSQL.append("actualizado_por=:ActualizadoPor,");
@@ -471,11 +463,6 @@ public class JornadaDao {
 			consultaSQL.append(NOMBRE_CAMPO_CLAVE);
 			consultaSQL.append("=:Id");
 			MapSqlParameterSource listaParametros= new MapSqlParameterSource();
-			/*listaParametros.addValue("Estacion", jornada.getIdEstacion());
-			listaParametros.addValue("Operario1", jornada.getIdOperario1());
-			listaParametros.addValue("Operario2", jornada.getIdOperario2());
-			listaParametros.addValue("Comentario", jornada.getComentario());
-			listaParametros.addValue("FechaOperativa", jornada.getFechaOperativa());*/
 			listaParametros.addValue("Observacion", jornada.getObservacion());
 			listaParametros.addValue("Estado", jornada.getEstado());
 			listaParametros.addValue("ActualizadoPor", jornada.getActualizadoPor());
@@ -547,11 +534,13 @@ public class JornadaDao {
     return respuesta;
   }
 	
-	public RespuestaCompuesta eliminarRegistro(int idRegistro){		
+	public RespuestaCompuesta eliminarRegistro(int idRegistro) {
+		
 		RespuestaCompuesta respuesta = new RespuestaCompuesta();
-		int cantidadFilasAfectadas=0;	
-		String consultaSQL="";
+		int cantidadFilasAfectadas = 0;	
+		String consultaSQL = "";
 		Object[] parametros = {idRegistro};
+		
 		try {
 			consultaSQL="DELETE FROM " + NOMBRE_TABLA + " WHERE " + NOMBRE_CAMPO_CLAVE + "=?";
         	cantidadFilasAfectadas = jdbcTemplate.update(consultaSQL, parametros);
@@ -560,20 +549,21 @@ public class JornadaDao {
 				respuesta.estado=false;
 				return respuesta;
 			}
-			respuesta.estado=true;
-		} catch (DataIntegrityViolationException excepcionIntegridadDatos){	
-			excepcionIntegridadDatos.printStackTrace();
-			respuesta.error= Constante.EXCEPCION_INTEGRIDAD_DATOS;
-			respuesta.estado=false;
-		} catch (DataAccessException excepcionAccesoDatos){
-			excepcionAccesoDatos.printStackTrace();
-			respuesta.error= Constante.EXCEPCION_ACCESO_DATOS;
-			respuesta.estado=false;
+			respuesta.estado = true;
+		} catch (DataIntegrityViolationException e) {	
+			e.printStackTrace();
+			respuesta.error = Constante.EXCEPCION_INTEGRIDAD_DATOS;
+			respuesta.estado = false;
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			respuesta.error = Constante.EXCEPCION_ACCESO_DATOS;
+			respuesta.estado = false;
 		}
+		
 		return respuesta;
 	}
 	
-	public RespuestaCompuesta ActualizarEstadoRegistro(Jornada jornada){
+	public RespuestaCompuesta ActualizarEstadoRegistro(Jornada jornada) {
 		RespuestaCompuesta respuesta = new RespuestaCompuesta();
 		StringBuilder consultaSQL= new StringBuilder();
 		int cantidadFilasAfectadas=0;
@@ -598,7 +588,7 @@ public class JornadaDao {
 			listaParametros.addValue("Id", jornada.getId());
 			SqlParameterSource namedParameters= listaParametros;
 			/*Ejecuta la consulta y retorna las filas afectadas*/
-			cantidadFilasAfectadas= namedJdbcTemplate.update(consultaSQL.toString(),namedParameters);		
+			cantidadFilasAfectadas= namedJdbcTemplate.update(consultaSQL.toString(), namedParameters);		
 			if (cantidadFilasAfectadas>1){
 				respuesta.error= Constante.EXCEPCION_CANTIDAD_REGISTROS_INCORRECTA;
 				respuesta.estado=false;
@@ -616,4 +606,5 @@ public class JornadaDao {
 		}
 		return respuesta;
 	}
+	
 }

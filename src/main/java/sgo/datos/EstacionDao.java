@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import sgo.entidad.Cisterna;
 import sgo.entidad.Estacion;
+import sgo.entidad.Jornada;
 import sgo.entidad.Contenido;
 import sgo.entidad.ParametrosListar;
 import sgo.entidad.RespuestaCompuesta;
@@ -478,6 +479,50 @@ public class EstacionDao {
 			respuesta.error= Constante.EXCEPCION_ACCESO_DATOS;
 			respuesta.estado=false;
 		}
+		return respuesta;
+	}
+	
+	public RespuestaCompuesta recuperarEstaciones(ParametrosListar parameter) {
+
+		int totalRegistros = 0, 
+		totalEncontrados = 0;
+		RespuestaCompuesta respuesta = new RespuestaCompuesta();
+		Contenido<Estacion> contenido = new Contenido<Estacion>();
+		List<Estacion> listaRegistros = new ArrayList<Estacion>();
+		List<Object> parametros = new ArrayList<Object>();
+		
+		try {
+			
+			StringBuilder sql = new StringBuilder();
+			sql.setLength(0);
+			sql.append(" SELECT * FROM sgo.estacion ");
+			sql.append(" WHERE id_operacion = " + parameter.getFiltroOperacion());
+			sql.append(" AND estado = 1 "); 
+			sql.append(" AND id_estacion NOT IN ( ");
+			sql.append(" SELECT DISTINCT es.id_estacion ");
+			sql.append(" FROM sgo.estacion es, sgo.jornada jo ");
+			sql.append(" WHERE es.id_estacion = jo.id_estacion and ");
+			sql.append(" jo.fecha_operativa = '" + parameter.getFiltroFechaJornada() + "' ");
+			sql.append(" ); ");
+			
+			listaRegistros = jdbcTemplate.query(sql.toString(), parametros.toArray(), new EstacionMapper2());
+			contenido.carga = listaRegistros;
+			respuesta.estado = true;
+			respuesta.contenido = contenido;
+			respuesta.contenido.totalRegistros = totalRegistros;
+			respuesta.contenido.totalEncontrados = totalEncontrados;
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			respuesta.error=  Constante.EXCEPCION_ACCESO_DATOS;
+			respuesta.estado = false;
+			respuesta.contenido = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			respuesta.error = Constante.EXCEPCION_GENERICA;
+			respuesta.contenido = null;
+			respuesta.estado = false;
+		}
+		
 		return respuesta;
 	}
 }

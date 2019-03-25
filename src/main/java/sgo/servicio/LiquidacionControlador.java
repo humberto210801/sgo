@@ -27,11 +27,13 @@ import sgo.datos.BitacoraDao;
 import sgo.datos.ClienteDao;
 import sgo.datos.DiaOperativoDao;
 import sgo.datos.EnlaceDao;
+import sgo.datos.EstacionDao;
 import sgo.datos.JornadaDao;
 import sgo.datos.LiquidacionDao;
 import sgo.datos.OperacionDao;
 import sgo.entidad.Bitacora;
 import sgo.entidad.Enlace;
+import sgo.entidad.Estacion;
 import sgo.entidad.Jornada;
 import sgo.entidad.Liquidacion;
 import sgo.entidad.MenuGestor;
@@ -64,6 +66,8 @@ public class LiquidacionControlador {
  private LiquidacionDao dLiquidacion;
  @Autowired
  private JornadaDao dJornada;
+ @Autowired
+ private EstacionDao dEstacion;
  @Autowired
  ServletContext servletContext;
  //
@@ -477,6 +481,38 @@ RespuestaCompuesta recuperarRegistros(HttpServletRequest httpRequest, Locale loc
         			 throw new Exception(gestorDiccionario.getMessage("sgo.errorJornadaAnterior", null, locale));
         		 }
         	 }
+         }
+         /**
+          * Fin validacion
+          */
+         
+         
+         /**
+          * Validacion de las estaciones no utilizadas por la operacion.
+          * Lista las estaciones de la operacion, filtrado por las no utilizadas el dia operativo
+          */
+         parametros = new ParametrosListar();
+         if (peticionHttp.getParameter("fechaOperativa") != null) {
+             parametros.setFiltroFechaJornada(peticionHttp.getParameter("fechaOperativa"));
+         }
+         
+         parametros.setFiltroOperacion(Utilidades.parseInt(peticionHttp.getParameter("idOperacion")));
+         respuesta = dEstacion.recuperarEstaciones(parametros);
+         if (!respuesta.estado) {
+             throw new Exception(gestorDiccionario.getMessage("sgo.recuperarFallido", null, locale));
+         }
+
+         if (respuesta.contenido.carga.size() > 0) {
+        	 
+        	 String nombres = "";
+        	 for (Estacion obj : (List<Estacion>) respuesta.contenido.carga) {
+        		 nombres += obj.getNombre() + ",";
+        	 }
+        	 
+        	 String mensaje = gestorDiccionario.getMessage("sgo.estacionesExistentes", null, locale);
+        	 mensaje = mensaje.replaceAll("ESTACION_NAME", nombres);
+        	 
+        	 throw new Exception(mensaje);
          }
          /**
           * Fin validacion
